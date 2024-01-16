@@ -13,20 +13,19 @@ if place:
         # Get the temperature/sky data
         filtered_data = get_data(place, days)
 
-        match option:
-            case "Temperature":
-                temperatures = [i["main"]["temp"] / 10 for i in filtered_data]
-                type(temperatures)
-                dates = [d["dt_txt"] for d in filtered_data]
-                # Create a Temperature plot
-                figure = px.line(x=dates, y=temperatures, labels={"x": "Date", "y": "Temperature (C)"})
-                st.plotly_chart(figure)
-            case "Sky":
-                sky_conditions = [i["weather"][0]["main"] for i in filtered_data]
-                print(sky_conditions)
-                images = {"Clear": "images/clear.png", "Clouds": "images/cloud.png",
-                          "Rain": "images/rain.png", "Snow": "images/snow.png"}
-                image_paths = [images[i] for i in sky_conditions]
-                st.image(image_paths, width=115)
+        if option == "Temperature":
+            temperatures = [i["main"]["temp"] / 10 for i in filtered_data]
+            type(temperatures)
+            dates = [d["dt_txt"] for d in filtered_data]
+            # Create a Temperature plot
+            figure = px.line(x=dates, y=temperatures, labels={"x": "Date", "y": "Temperature (C)"})
+            st.plotly_chart(figure)
+        if option == "Sky":
+            sky_conditions = [i["weather"][0]["main"] for i in filtered_data]
+            print(sky_conditions)
+            images = {"Clear": "images/clear.png", "Clouds": "images/cloud.png",
+                      "Rain": "images/rain.png", "Snow": "images/snow.png"}
+            image_paths = [images[i] for i in sky_conditions]
+            st.image(image_paths, width=115)
     except KeyError:
         st.write("That Place does not exist")
